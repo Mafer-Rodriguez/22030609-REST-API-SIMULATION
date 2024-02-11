@@ -206,15 +206,67 @@ function sendReponse(code, body) {
 
     return response;
 }
-
+/** 
+//Return all existing books.
 function get(getBook) {
     for (let i = 0; i < library.length; i++) {//loop through the library array
         if (library[i].title === getBook) {//library[i].title is the title of the book 
             return sendReponse(200, library[i]);
         }
+
     }
     
     return sendReponse(400);
 }
 
 console.log(get("The Lean Startup"));
+
+//Return all existing books.
+function getAllBooks(getAllBooks) {
+    if (library.length > 0){//length method returns the number of elements in the array
+      const book = library;
+      return sendReponse(200 , book);
+    }else if (library.length === 0){//length method returns the number of elements in the array, if there are no elements in the array, it returns 0
+
+      return sendReponse(404);
+    }
+    else{
+      return sendReponse(500);
+    }
+  }  
+  
+  console.log(getAllBooks(library ));
+
+
+//Adds a new book to the books array and return the book created, and the new array, including the new book.
+function addBook(newBook){
+    if (library.push(newBook)){//remember to push the new book or agree a new element to the array
+    return sendReponse(200 , library)  ;
+  }else {
+    return sendReponse(404);
+  }
+}
+console.log(addBook({
+    "title": "Eleven Minutes",
+    "ISBN": "9874562547896",
+    "year": 2009,
+    "genre": "Fiction", 
+    "author": "Paulo Coelho",
+    "stock": 6,
+    "publisher": "HarperOne"
+  }));
+*//** 
+function removeBook(removeBook) {
+    for (let i = 0; i < library.length; i++) {
+        //the next line is checking if the title of the book is the same as the title of the book that we want to remove
+        if (library[i].title === removeBook || library[i].ISBN === removeBook) {//library[i].title is the title of the book
+            // || operator is used to compare two or more conditions
+            const removed = library.splice(i, 1);
+            console.log(sendReponse(200, { deleted: removed[0] , library }));
+        }
+    }
+    
+    return sendReponse(400);
+}
+*/
+
