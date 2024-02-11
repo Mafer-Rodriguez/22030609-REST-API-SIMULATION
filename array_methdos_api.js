@@ -206,7 +206,7 @@ function sendReponse(code, body) {
 
     return response;
 }
-/** 
+
 //Return all existing books.
 function get(getBook) {
     for (let i = 0; i < library.length; i++) {//loop through the library array
@@ -255,7 +255,7 @@ console.log(addBook({
     "stock": 6,
     "publisher": "HarperOne"
   }));
-*//** 
+
 function removeBook(removeBook) {
     for (let i = 0; i < library.length; i++) {
         //the next line is checking if the title of the book is the same as the title of the book that we want to remove
@@ -268,5 +268,95 @@ function removeBook(removeBook) {
     
     return sendReponse(400);
 }
-*/
+console.log(removeBook("The Lean Startup"));
 
+function filterByGenre(genre){ 
+    const filteredLibrary = library.filter(function(book) {//filter method creates a new array with all elements that pass the test implemented by the provided function
+        return book.genre === genre;//the function is checking if the genre of the book is the same as the genre that we want to filter
+    });
+    if (filteredLibrary.length > 0){
+        return sendReponse(200, filteredLibrary);
+    } else if (library.length === 0) {
+        return sendReponse(404);
+    } else {
+        return sendReponse(500);
+    }
+}
+console.log(filterByGenre("Fantasy"));
+
+function listBooks(){
+    const list = library.map(function(book) {//map method creates a new array populated with the results of calling a provided function on every element in the calling array
+        return `${book.title} - ${book.author} - ${book.year}`; //$ is used to call the value of the book
+    });
+    if (list.length > 0){
+        return sendReponse(200, list);
+    } else if (library.length === 0) {
+        return sendReponse(404);
+    } else {
+        return sendReponse(500);
+    }
+}
+console.log(listBooks());   
+
+function getBooksByYear(year) {
+    const books = library.filter(function(book) {//filter method creates a new array with all elements that pass the test implemented by the provided function
+        return book.year === year;
+    });
+    if (books.length > 0) {
+        return sendReponse(200, books);
+    } else {
+        return sendReponse(404);
+    }
+}
+console.log(getBooksByYear(2011));
+
+function genreFullAvallability(genre){
+    const books = library.filter(function(book) {
+        return  book.genre === genre;
+    });
+    const stock = books.every(function(book) {//every method tests whether all elements in the array pass the test implemented by the provided function
+        return book.stock > 0;//the function is checking if the stock of the book is greater that 0
+    }); 
+    if (stock === true){
+        return sendReponse(200, stock);
+    } else {
+        return sendReponse(400, stock);
+    }
+}
+console.log(genreFullAvallability("Fantasy"));
+
+function genrePartialAvallability(genre){
+    const books = library.filter(function(book) {
+        if (book.genre === genre) {
+            return sendReponse(200, book);
+        }
+    });
+    const stock = books.some(function(book) {// some method tests whether at least one element in the array passes the test implemented by the provided
+        return book.stock > 0;//the function is checking if the stock of the book is greater that 0
+    });
+    if (stock === true){
+        return sendReponse(200, stock);
+    } else {
+        return sendReponse(400, stock);
+    }
+}
+console.log(genrePartialAvallability("Fiction"));
+
+
+
+function getCountBy(countBy){
+    const count = library.reduce(function(acc, book) {//reduce method applies a function against an accumulator and each element in the array (from left to right) to reduce it to a single value
+        if (acc[book[countBy]]) {//remenber that acc is the accumulator and book is the current value
+            acc[book[countBy]] += 1; 
+        } else {
+            acc[book[countBy]] = 1;
+        }
+        return acc;
+    }, {});
+    if (Object.keys(count).length > 0) {
+        return sendReponse(200, count);
+    } else {
+        return sendReponse(404);
+    }
+}
+console.log(getCountBy("author"));
