@@ -214,8 +214,8 @@ function get(getBook) {
         return sendReponse(404);
     }
 }
-
 console.log(get("The Lean Startup"));
+
 
 const getAllBooks = (allBooks) => {
     try {
@@ -250,3 +250,37 @@ console.log(
         publisher: "HarperOne",
     })
 );
+
+const removeBook = (removeBook) => {
+    library.forEach((book, index) => {
+        if (book.title === removeBook || book.ISBN === removeBook) {
+            const removed = library.splice(index, 1);
+            console.log(sendReponse(200, { deleted: removed[0], library }));
+        }
+    });
+
+    return sendReponse(400);
+}
+console.log(removeBook("The Lean Startup"));
+
+function filterBy (genre){
+    const books = library.filter((book) => book.genre === genre);
+    if (books.length > 0) {
+        return sendReponse(200, books);
+    } else {
+        return sendReponse(404);
+    }
+}
+console.log(filterBy("Fiction"));
+
+const listBooks = () => {
+    const list = library.map((book) => `${book.title} - ${book.author} - ${book.year}`);
+    if (list.length > 0) {
+        return sendReponse(200, list);
+    } else if (library.length === 0) {
+        return sendReponse(404);
+    } else {
+        return sendReponse(500);
+    }
+};
+console.log(listBooks());
