@@ -284,3 +284,60 @@ const listBooks = () => {
     }
 };
 console.log(listBooks());
+
+const getBooksByYear = (year) => {
+    const books = library.filter((book) => book.year === year);
+    if (books.length > 0) {
+        return sendReponse(200, books);
+    } else {
+        return sendReponse(404);
+    }
+}
+console.log(getBooksByYear(2011));
+
+
+const genreFullAvallability = (genre) => {
+    const books = library.filter((book) => book.genre === genre);
+    const stock = books.every((book) => book.stock > 0);
+    if (stock === true) {
+        return sendReponse(200, stock);
+    } else {
+        return sendReponse(400, stock);
+    }
+};
+console.log(genreFullAvallability("Fantasy"));
+
+
+const genrePartialAvallability = (genre) => {
+    const books = library.filter((book) => {
+        if (book.genre === genre) {
+            return sendReponse(200, book);
+        }
+    });
+    const stock = books.some((book) => book.stock > 0);
+    if (stock === true) {
+        return sendReponse(200, stock);
+    } else {
+        return sendReponse(400, stock);
+    }
+};
+console.log(genrePartialAvallability("Fiction"));
+
+
+
+const getCountBy = (countBy) => {
+    const count = library.reduce((acc, book) => {
+        if (acc[book[countBy]]) {
+            acc[book[countBy]] += 1; 
+        } else {
+            acc[book[countBy]] = 1;
+        }
+        return acc;
+    }, {});
+    if (Object.keys(count).length > 0) {
+        return sendReponse(200, count);
+    } else {
+        return sendReponse(404);
+    }
+}
+console.log(getCountBy("author"));
